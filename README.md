@@ -1,6 +1,6 @@
 # Bird-Python: SQL vs. Python Benchmark
 
-This repository contains the dataset and code for the paper **"Benchmarking Text-to-Python against Text-to-SQL: The Impact of Explicit Logic and Ambiguity"** (Under Review at ACL 2026).
+Bird-Python bridges the gap between declarative SQL and procedural Python in data analytics by providing a consistent evaluation baseline. This project delivers a rigorously aligned dataset with verified Pandas solutions derived from the BIRD benchmark, integrated with the Logic Completion Framework (LCF) to resolve natural language ambiguity. The codebase includes a complete pipeline for code generation and semantic execution validation.
 
 ## 📌 Introduction
 
