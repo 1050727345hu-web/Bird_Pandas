@@ -23,9 +23,9 @@ The core contribution of this repository is the aligned SQL-Python dataset. The 
 *   **Fields:** `question_id`, `db_id`, `question`, `evidence`, `SQL`, `difficulty`.
 
 ### 2. `Bird-Pandas/Verified_Bird_Python.json`
-*   **Description:** This is our **enhanced dataset** containing the Python code annotations.
-*   **Content:** It includes all the information from the original BIRD dev set, augmented with verified Python code solutions that yield the same execution results as the Gold SQL.
-*   **Methodology:** The Python code has been generated and rigorously verified against the database to ensure execution accuracy and logic alignment with the original SQL.
+*   **Description:** This is our **enhanced dataset** containing the Pandas code annotations.
+*   **Content:** It includes all the information from the original BIRD dev set, augmented with verified Pandas code solutions that yield the same execution results as the Gold SQL.
+*   **Methodology:** The Pandas code has been generated and rigorously verified against the database to ensure execution accuracy and logic alignment with the original SQL.
 
 ## 🚀 Project Structure
 
@@ -37,10 +37,10 @@ The core contribution of this repository is the aligned SQL-Python dataset. The 
 │   ├── LCP_Enhanced_Bird/          # Enhanced dataset with explicit constraints (addressing info deficits)
 │   ├── LLM-based Evaluation/       # LLM-based Semantic Validator Scripts
 │   ├── Logic Completion Framework/ # LCF prompt templates and Qwen3-Max generated logic
-│   ├── Text2Pandas/                # Test scripts and prompts for Text-to-Python
+│   ├── Text2Pandas/                # Test scripts and prompts for Text-to-Pandas
 │   ├── Text2SQL/                   # Test scripts and prompts for Text-to-SQL
 │   ├── Origin_dev_Bird.json        # Original BIRD development set
-│   ├── Verified_Bird_Python.json   # Verified dataset containing SQL and Python ground truths
+│   ├── Verified_Bird_Pandas.json   # Verified dataset containing SQL and Pandas ground truths
 │   ├── Convert_SQLite_to_CSV.py    # Convert the SQLite database to a CSV file
 │   └── README.md                       # Project documentation
 └── 
