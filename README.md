@@ -97,7 +97,7 @@ Please cite our paper if you use this code or dataset in your work (citation wil
 @inproceedings{BirdPandas2026,
   title={BIRD-Pandas: Diagnosing the Cross-Paradigm Divergence Between Text-to-SQL and Text-to-Pandas},
   author={Anonymous Authors},
-  booktitle={Under Review at NeurIPS},
+  booktitle={Under Review at ICLR},
   year={2026}
 }
 ```
