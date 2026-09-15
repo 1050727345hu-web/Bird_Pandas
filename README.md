@@ -89,20 +89,5 @@ We provide a comprehensive pipeline for generating and verifying Python solution
 *   **Function:** Semantically validates the generated code by comparing its execution results against the ground truth.
 *   **Details:** This module executes the generated Python code and compares the resulting data structures with the verified ground truth from `Bird-Pandas/Verified_Bird_Python.json`. An LLM-based validator is employed to determine equivalence, robustly handling format variations (e.g., list vs. tuple, float precision). Users should ensure the `PREDICTED_CODE_PATH` in this script matches the output location from the generation step.
 
-## 📄 Citation
 
-Please cite our paper if you use this code or dataset in your work (citation will be updated upon publication):
-
-```bibtex
-@inproceedings{BirdPandas2026,
-  title={BIRD-Pandas: Diagnosing the Cross-Paradigm Divergence Between Text-to-SQL and Text-to-Pandas},
-  author={Anonymous Authors},
-  booktitle={Under Review at ICLR},
-  year={2026}
-}
-```
-
-## 📝 License
-
-[Insert License Name, e.g., MIT, CC-BY-4.0]
 
