@@ -173,36 +173,25 @@ class LLMValidator:
             truncated_output = _truncate_list(processed_output)
             truncated_expected = _truncate_list(processed_expected)
             
+            # Get ground truth query if available
+            ground_truth_query = getattr(self, 'current_code', '')
+            
             messages = [
                 {"role": "system", "content": """
-You are a professional output-equivalence validator. Decide whether Output 1 and Output 2 are semantically and materially equivalent. Follow these rules strictly:
+You are a professional output-equivalence validator. Decide whether Output 1 and Output 2 are logically and materially equivalent. Follow these rules strictly:
 
-1) Ignore data formatting and presentation; focus only on the actual content/meaning. A stringified list is equivalent to the same real list structure.
-2) Ignore pandas Index metadata (e.g., "Index([...], dtype='object')"); compare only computed results.
-3) Numeric representation: 1.0 == 1, and strings like "1.0" equal 1.0 after numeric coercion.
-4) List/row order does not matter. Compare as multisets, not sequences.
-5) Nesting level does not matter if underlying elements are the same. E.g., ["a","b"] == [["a"],["b"]] == [[["a"]]] after flattening.
-6) Parse stringified collections (lists/tuples/dicts) into real structures before comparing.
-7) Ignore whitespace, newlines, and other formatting differences.
-8) For tabular data, compare the data content, not the container format (CSV vs JSON).
-9) Single-element list equivalence: ['apple'] == 'apple'; [123] == 123.
-10) List vs non-list: When a list has exactly one element equal to the scalar, treat them as equivalent.
-
-Additional clarifications to avoid false negatives (do not weaken correctness):
-11) Label–value pairs vs values-only: If one output is (label, value) pairs (or dict-like rows) and the other is values-only, ignore labels and compare the values after type normalization and order-insensitive matching.
-12) Superset/subset columns: If one table has extra descriptive columns (e.g., names, titles, labels, text) and the other has only the target columns, consider them equivalent if a projection of the wider result exactly matches the narrower result (row-wise, order-insensitive). Extra columns may be ignored; missing required values may not.
-13) Duplicates: If one output contains duplicate rows/values while the other contains each value once, compare after de-duplicating both sides. Duplicates alone must not cause inequality.
-14) Orientation/shape: Nx1, 1xN, and nested forms that contain the same set of scalars are equivalent after flattening and (if needed) transposing.
-15) Boolean normalization: Normalize and treat as equivalent true/false, "TRUE"/"FALSE", "yes"/"no", "YES"/"NO", "y"/"n", and 1/0.
-16) Name tokenization: "First Last" is equivalent to ["First","Last"] when tokenizing by whitespace yields the same tokens (case-insensitive).
-17) Numeric scale: Fractions and percentages are equivalent if multiplying/dividing by 100 aligns them within normal rounding tolerance (e.g., 0.2272727 == 22.7272727%). Normalize strings like "22.7%".
-18) Date/time normalization: Normalize formats (e.g., "7:00" == "07:00:00"). Treat NaN/None/NULL/"NaN" as the same null. Apply rule 13 for repeated timestamps.
-19) Natural-language sentences vs structured tuples: If a sentence unambiguously contains the same entities and numbers as the structured output, treat them as equivalent after extracting those entities and values.
-20) No partial matches: After applying all normalizations, only mark as equivalent if both outputs express the same set of values. Do not infer missing values.
+Core Equivalence Rules:
+1. Content Over Format: Ignore data presentation (e.g., CSV vs. JSON, whitespace) and metadata (e.g., Pandas Index). Focus on the actual content.
+2. Structural Invariance: Flatten nested structures. A scalar, a single-element list, and a 1xN array are equivalent if they contain the same value (e.g., ['apple'] == 'apple').
+3. Order Sensitivity: If the ground truth query contains an ORDER BY clause or a LIMIT clause, ordering is required and the ranked sequence must match. Otherwise, compare outputs as unordered multisets regardless of row order.
+4. Type Normalization: Normalize numeric types (1.0 == 1), booleans (True/yes/1), and date formats before comparison.
+5. Superset Validity: If one output contains extra descriptive columns (labels) and the other is value-only, they are equivalent if the value projection matches exactly.
+6. Numeric Tolerance: Numerically equivalent representations are equivalent (e.g., 1.0 == 1, $19.99 == $20.00 within rounding). Apply the same tolerance to values that are semantically identical but represented differently.
+7. De-duplication: If one output contains duplicates and the other is unique, compare the sets of unique values.
 
 Respond with exactly one word: "Correct" if equivalent, "Incorrect" otherwise.
                 """},
-                {"role": "user", "content": f"Output 1: {truncated_output}\nOutput 2: {truncated_expected}"}
+                {"role": "user", "content": f"Ground Truth Query: {ground_truth_query}\nOutput 1: {truncated_output}\nOutput 2: {truncated_expected}"}
             ]
             
             try:
